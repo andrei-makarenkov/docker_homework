@@ -1,9 +1,12 @@
 # docker_homework
 # 1 Лекция
 Написать Dockerfile для frontend располагается в директории /frontend, собрать и запустить
+
 Запуск:
+
 cd D:\DevOps\Docker\docker_homework\frontend
 docker build -t frontend -f Dockerfile .
+
 docker run -d -p 80:80 --name frontend frontend
 
 # 2 Лекция
@@ -11,15 +14,22 @@ docker run -d -p 80:80 --name frontend frontend
 1. backend
 2. postgresql
 Осуществить сетевые настройки, для работы связки backend и postgresql
+
 Запуск:
+
 cd D:\DevOps\Docker\docker_homework\lib_catalog
+
 docker build -t backend -f Dockerfile .
+
 docker run -d -p 8000:8000 --name backend backend
 
 # 3 Лекция
 Написать docker-compose.yaml, для всего проекта, собрать и запустить
+
 Запуск:
+
 cd D:\DevOps\Docker\docker_homework\lib_catalog
+
 docker-compose up -d --build
 
 # Критерий оценки финального задания
