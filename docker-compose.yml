@@ -1,0 +1,67 @@
+version: '3.9'
+
+services:
+  database:
+    container_name: database
+    image: postgres:14.1-alpine3.15
+    restart: always
+    networks:
+      - back-tier
+    environment:
+      - POSTGRES_DB=django
+      - POSTGRES_USER=django
+      - POSTGRES_PASSWORD=django
+    volumes:
+    - database-volume:/var/lib/postgresql/data
+
+  backend:
+    container_name: backend
+    image: backend
+    build: 
+      context: lib_catalog
+    command: >
+      sh -c "python3 manage.py migrate &&
+             python3 manage.py loaddata bbk_data.json &&
+             python3 manage.py runserver 0.0.0.0:8000"
+    restart: always
+    networks:
+      - front-tier
+      - back-tier 
+    ports:
+      - "8000:8000"
+    depends_on:
+      - database
+        
+
+
+
+  frontend:
+    container_name: frontend
+    image: frontend
+    build:
+      context: frontend
+    restart: always
+    networks:
+      - front-tier
+      - back-tier
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - database
+
+
+
+volumes:
+  database-volume:
+    name: database-volume
+
+
+networks:
+  front-tier:
+    name: front-tier-network
+    driver: bridge
+  back-tier:
+    name: back-tier-network
+    driver: bridge
+    internal: true
